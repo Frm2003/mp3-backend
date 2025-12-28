@@ -1,4 +1,6 @@
 import Fastify, { type FastifyInstance } from "fastify";
+import cors from '@fastify/cors';
+
 import audioController from "../controllers/AudioController.ts";
 
 class Server {
@@ -10,12 +12,20 @@ class Server {
         this.PORT = 3000
 
         this.registerRoute();
+        this.registerCors();
+    }
+
+    public registerCors() {
+        this.fastifyInstance.register(cors, {
+            origin: '*',
+            methods: ['GET', 'POST', 'PUT', 'DELETE'],
+        })
     }
 
     public registerRoute(): void {
         this.fastifyInstance.post('/info', audioController.getInfo);
         this.fastifyInstance.post('/download', audioController.downloadFile);
-        this.fastifyInstance.get('/stream',  audioController.streamFile);
+        this.fastifyInstance.get('/stream', audioController.streamFile);
     }
 
     public async start(): Promise<void> {
