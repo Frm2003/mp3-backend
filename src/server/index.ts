@@ -1,6 +1,5 @@
 import Fastify, { type FastifyInstance } from "fastify";
 import cors from '@fastify/cors';
-
 import audioController from "../controllers/AudioController.js";
 
 class Server {
@@ -9,7 +8,8 @@ class Server {
 
     constructor() {
         this.fastifyInstance = Fastify({ logger: true });
-        this.PORT = 3000
+
+        this.PORT = Number(process.env.PORT) || 3000;
 
         this.registerRoute();
         this.registerCors();
@@ -19,7 +19,7 @@ class Server {
         this.fastifyInstance.register(cors, {
             origin: '*',
             methods: ['GET', 'POST', 'PUT', 'DELETE'],
-        })
+        });
     }
 
     public registerRoute(): void {
@@ -30,7 +30,10 @@ class Server {
 
     public async start(): Promise<void> {
         try {
-            await this.fastifyInstance.listen({ port: this.PORT });
+            await this.fastifyInstance.listen({
+                port: this.PORT,
+                host: "0.0.0.0"
+            });
         } catch (e) {
             this.fastifyInstance.log.error(e);
             process.exit(1);
