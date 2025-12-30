@@ -44,8 +44,12 @@ export default class AudioService {
     private showPercent(progress: VideoProgress): void {
         const { percentage_str } = progress;
 
-        process.stdout.clearLine(0);
-        process.stdout.cursorTo(0);
-        process.stdout.write(`Progress download: ${percentage_str}`);
+        if (process.stdout.isTTY) {
+            process.stdout.clearLine(0);
+            process.stdout.cursorTo(0);
+            process.stdout.write(`Progress download: ${percentage_str}`);
+        } else {
+            console.log(`Progress download: ${percentage_str}`);
+        }
     }
 }
