@@ -1,7 +1,7 @@
 import type { FastifyReply, FastifyRequest } from "fastify";
-import FileService from "../service/FileService.ts";
-import type FileInfo from "../models/FileInfo.ts";
-import AudioService from "../service/AudioService.ts";
+import FileService from "../service/FileService.js";
+import type FileInfo from "../models/FileInfo.js";
+import AudioService from "../service/AudioService.js";
 
 interface Audio {
     url: string;

@@ -1,3 +1,3 @@
-import server from "./server/index.ts";
+import server from "./server/index.js";
 
 server.start();

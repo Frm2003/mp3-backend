@@ -2,7 +2,7 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import { YtDlp, type VideoInfo, type VideoProgress } from 'ytdlp-nodejs';
 
-import FileInfo from '../models/FileInfo.ts';
+import FileInfo from '../models/FileInfo.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);

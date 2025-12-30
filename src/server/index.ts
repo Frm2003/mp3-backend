@@ -1,7 +1,7 @@
 import Fastify, { type FastifyInstance } from "fastify";
 import cors from '@fastify/cors';
 
-import audioController from "../controllers/AudioController.ts";
+import audioController from "../controllers/AudioController.js";
 
 class Server {
     private fastifyInstance!: FastifyInstance;
