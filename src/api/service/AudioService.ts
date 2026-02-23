@@ -13,7 +13,7 @@ export default class AudioService {
             const response = await this.ytdlp.getInfo(url);
             return new FileInfo(response.title, response.uploader);
         } catch (e) {
-            console.log(e);
+            console.error(e);
             throw e;
         }
     }
@@ -22,10 +22,8 @@ export default class AudioService {
         try {
             await this.ytdlp.downloadMp3(url);
         } catch (e) {
-            console.log(e);
+            console.error(e);
             throw e;
         }
     }
 }
-
-new AudioService().getInfo({ url: "https://www.youtube.com/watch?v=A_qCxsXRFr0" });
