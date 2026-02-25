@@ -4,8 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "node --loader ts-node/esm ./src/app.ts",
-    "start": "node ./dist/app.js",
+    "dev": "node --env-file=.env --loader ts-node/esm ./src/app.ts",
+    "start": "node --env-file=.env ./dist/app.js",
     "build": "tsc"
   },
   "keywords": [],

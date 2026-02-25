@@ -2,21 +2,27 @@ import path from 'path';
 import { promises as fs } from "fs";
 import { fileURLToPath } from 'url';
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-const outputDir = path.resolve(__dirname, '../../..', 'temp');
-
 export default class FileService {
+    declare static __filename: string;
+    declare static __dirname: string;
+    declare static outputDir: string;
+
+    static {
+        this.__filename = fileURLToPath(import.meta.url);
+        this.__dirname = path.dirname(this.__filename);
+        this.outputDir = path.resolve(this.__dirname, '../../..', 'temp');
+    }
+
     public static async readFile(): Promise<Buffer> {
         try {
-            const files = await fs.readdir(outputDir);
+            const files = await fs.readdir(this.outputDir);
 
             const fileName = files.find(f => path.extname(f).toLowerCase() === '.webm'.toLowerCase());
 
             if (!fileName)
                 throw new Error(`Nenhum arquivo com a extensão .webm encontrado`);
 
-            const filePath = path.join(outputDir, fileName);
+            const filePath = path.join(this.outputDir, fileName);
 
             return await fs.readFile(filePath);
         } catch (e) {
@@ -27,14 +33,14 @@ export default class FileService {
 
     public static async deleteFile(): Promise<void> {
         try {
-            const files = await fs.readdir(outputDir);
+            const files = await fs.readdir(this.outputDir);
 
             const fileName = files.find(f => path.extname(f).toLowerCase() === '.webm'.toLowerCase());
 
             if (!fileName)
                 throw new Error(`Nenhum arquivo com a extensão .webm encontrado`);
 
-            const filePath = path.join(outputDir, fileName);
+            const filePath = path.join(this.outputDir, fileName);
 
             await fs.unlink(filePath);
         } catch (e) {

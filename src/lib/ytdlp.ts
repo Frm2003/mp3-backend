@@ -1,18 +1,26 @@
 import path from "path";
 
 import { spawn } from "child_process";
+import { existsSync, mkdirSync, writeFileSync } from "fs";
 
-const isWindows = process.platform === "win32";
-const ytDlpBinary = isWindows ? "yt-dlp.exe" : "yt-dlp";
-const ytDlpPath = path.resolve(process.cwd(), "bin", ytDlpBinary);
 const outputDirPath = path.resolve(process.cwd(), "temp");
-const cookiesPath = path.resolve(process.cwd(), "temp/cookies.txt");
+const cookiesPath = path.resolve(process.cwd(), "temp", "cookies.txt");
 
 export default class Ytdlp {
+    declare ytDlpPath: string;
+    declare tempCookiePath: string;
+
+    constructor() {
+        const ytDlpBinary = process.platform === "win32" ? "yt-dlp.exe" : "yt-dlp";
+        this.ytDlpPath = path.resolve(process.cwd(), "bin", ytDlpBinary);
+
+        this.ensureTempFolder();
+        this.writeCookiesFile();
+    }
 
     public async getInfo(url: string): Promise<any> {
         return new Promise((resolve, reject) => {
-            const yt = spawn(ytDlpPath, ["-J", url, "--js-runtimes", "node"]);
+            const yt = spawn(this.ytDlpPath, ["-J", url, "--js-runtimes", "node"]);
 
             let stdout = "";
             let stderr = "";
@@ -43,8 +51,8 @@ export default class Ytdlp {
     }
 
     public async downloadMp3(url: string): Promise<void> {
-        return new Promise((resolve) => {
-            const yt = spawn(ytDlpPath, [
+        await new Promise<void>((resolve, reject) => {
+            const yt = spawn(this.ytDlpPath, [
                 "-x",
                 "--audio-format", "mp3",
                 "--cookies", cookiesPath,
@@ -57,9 +65,30 @@ export default class Ytdlp {
                 process.stdout.write(data.toString());
             });
 
+            yt.on("error", reject);
+
             yt.on("close", () => {
                 resolve();
             });
+
         });
+    }
+
+    private ensureTempFolder() {
+        if (!existsSync(outputDirPath)) {
+            mkdirSync(outputDirPath, { recursive: true });
+        }
+    }
+
+    private writeCookiesFile(): void {
+        const cookieContent = Buffer
+            .from(process.env.COOKIES_ENCRYPTED!, "base64")
+            .toString("utf-8");
+
+        if (!cookieContent) {
+            throw new Error("YT_COOKIES not defined");
+        }
+
+        writeFileSync(cookiesPath, cookieContent);
     }
 }
