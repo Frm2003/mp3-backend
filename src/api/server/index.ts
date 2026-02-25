@@ -12,14 +12,15 @@ class Server {
 
         this.PORT = Number(process.env.PORT) || 3000;
 
-        this.registerRoute();
         this.registerCors();
+        this.registerRoute();
     }
 
     public registerCors() {
         this.fastifyInstance.register(cors, {
-            origin: '*',
+            origin: ['http://localhost:5173', 'https://frm2003.github.io'],
             methods: ['GET', 'POST', 'PUT', 'DELETE'],
+            allowedHeaders: ['Content-Type', 'Authorization'],
         });
     }
 
