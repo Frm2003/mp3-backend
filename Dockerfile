@@ -19,5 +19,7 @@ RUN npm run build
 # 7️⃣ Expor porta
 EXPOSE 3000
 
+RUN chmod +x /app/bin/yt-dlp
+
 # 8️⃣ Comando para iniciar o app
 CMD ["npm", "start"]
