@@ -1,8 +1,9 @@
+name: mp3-backend
 services:
   app:
+    container_name: mp3-player-api
     build: ./
     ports:
       - "3000:3000"
-    command: npm start
     tty: true
     stdin_open: true
