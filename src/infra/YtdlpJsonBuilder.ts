@@ -10,11 +10,12 @@ export default class YtdlpJsonBuilder {
     }
 
     public async execute<T>(): Promise<T> {
-        const raw: string =
-            await new YtdlpExecutor([...this.args, this.urlArg]).execute();
+        const buffer: Buffer = await new YtdlpExecutor([...this.args, this.urlArg]).execute();
+
+        const text = buffer.toString("utf-8");
 
         try {
-            return JSON.parse(raw) as T;
+            return JSON.parse(text) as T;
         } catch {
             throw new Error("Falha ao fazer parse do JSON retornado pelo yt-dlp");
         }

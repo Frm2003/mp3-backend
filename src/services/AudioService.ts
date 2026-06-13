@@ -19,9 +19,10 @@ export default class AudioService {
         await Ytdlp.builder()
             .url(url)
             .add('--js-runtimes', 'node')
+            .add('--add-metadata')
             .extractAudio()
             .format('mp3')
-            .outputDir('./downloads/%(title)s.%(ext)s')
+            .outputDir('./downloads/audio.%(ext)s')
             .execute();
     }
 }

@@ -8,7 +8,7 @@ export default class FileService {
         await fs.mkdir(dirPath, { recursive: true });
     }
 
-    public async pathExists(targetPath: string): Promise<boolean> {
+    public async exists(targetPath: string): Promise<boolean> {
         try {
             await fs.access(targetPath);
             return true;
@@ -17,19 +17,15 @@ export default class FileService {
         }
     }
 
-    public async writeFile(filePath: string, data: Uint8Array): Promise<void> {
+    public async write(filePath: string, data: Uint8Array): Promise<void> {
         await fs.writeFile(filePath, data);
     }
 
-    public async readFile(filePath: string, encoding: BufferEncoding = "utf-8"): Promise<string> {
-        return fs.readFile(filePath, { encoding });
+    public async read(filePath: string): Promise<Buffer> {
+        return fs.readFile(filePath);
     }
 
-    public async deleteFile(filePath: string): Promise<void> {
+    public async delete(filePath: string): Promise<void> {
         await fs.unlink(filePath);
-    }
-
-    public async chmod(filePath: string, mode: number): Promise<void> {
-        await fs.chmod(filePath, mode);
     }
 }
